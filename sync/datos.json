@@ -739,9 +739,46 @@
       },
       "id": 3,
       "_scale": 14
+    },
+    {
+      "mealTypes": [
+        "desayuno"
+      ],
+      "country": "USA",
+      "temp": "caliente",
+      "prepTime": 15,
+      "servings": 2,
+      "healthy": false,
+      "image": "",
+      "emoji": "🍽️",
+      "i18n": {
+        "es": {
+          "name": "Tortitas",
+          "info": "Y ¿cuál es su origen? Realmente los habitantes de la Antigua Grecia ya comían algo parecido a lo que hoy en día llamamos “tortitas”.",
+          "ingredients": [],
+          "steps": []
+        },
+        "en": {
+          "name": "",
+          "info": "",
+          "ingredients": [],
+          "steps": []
+        },
+        "hu": {
+          "name": "",
+          "info": "",
+          "ingredients": [],
+          "steps": []
+        }
+      },
+      "tags": [
+        "cumpleaños",
+        "domingo felices"
+      ],
+      "id": 5
     }
   ],
   "mealImages": {},
-  "nextId": 5,
-  "updatedAt": "2026-08-26T20:20:18.376Z"
+  "nextId": 6,
+  "updatedAt": "2026-08-26T20:22:17.885Z"
 }
