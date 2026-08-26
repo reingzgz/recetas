@@ -32,16 +32,7 @@ const STRINGS = {
     nameRequiredAlert:"Escribe al menos el nombre del plato en algún idioma.",
     langName_es:"español", langName_en:"inglés", langName_hu:"húngaro",
     fallbackNotice:"Mostrando en {lang} — todavía no hay traducción a este idioma.",
-    authTitle:"Mi Libro de Recetas",
-    authSubtitle:"Inicia sesión o crea una cuenta para ver y guardar las recetas de la familia.",
-    emailLabel:"Email", passwordLabel:"Contraseña",
-    loginBtn:"Iniciar sesión", signupBtn:"Crear cuenta",
-    toggleToSignup:"¿No tienes cuenta? Regístrate", toggleToLogin:"¿Ya tienes cuenta? Inicia sesión",
-    authFillFields:"Escribe tu email y contraseña.",
-    authGenericError:"Algo ha fallado. Comprueba tus datos e inténtalo de nuevo.",
-    authCheckEmail:"Cuenta creada. Revisa tu email para confirmarla antes de iniciar sesión.",
-    authNotConfigured:"Esta web todavía no tiene la base de datos configurada. Añade tu URL y clave de Supabase en el código (busca SUPABASE_URL).",
-    logoutBtn:"Salir",
+    authNotConfigured:"Base de datos no configurada (falta SUPABASE_URL)",
     cloudLoadError:"No se han podido cargar las recetas. Comprueba tu conexión e inténtalo de nuevo.",
     cloudSaveError:"No se ha podido guardar. Comprueba tu conexión e inténtalo de nuevo."
   },
@@ -77,16 +68,7 @@ const STRINGS = {
     nameRequiredAlert:"Please enter the dish name in at least one language.",
     langName_es:"Spanish", langName_en:"English", langName_hu:"Hungarian",
     fallbackNotice:"Showing in {lang} — no translation for this language yet.",
-    authTitle:"My Recipe Book",
-    authSubtitle:"Log in or create an account to see and save the family's recipes.",
-    emailLabel:"Email", passwordLabel:"Password",
-    loginBtn:"Log in", signupBtn:"Create account",
-    toggleToSignup:"No account? Sign up", toggleToLogin:"Already have an account? Log in",
-    authFillFields:"Enter your email and password.",
-    authGenericError:"Something went wrong. Check your details and try again.",
-    authCheckEmail:"Account created. Check your email to confirm it before logging in.",
-    authNotConfigured:"This site doesn't have the database configured yet. Add your Supabase URL and key in the code (search for SUPABASE_URL).",
-    logoutBtn:"Log out",
+    authNotConfigured:"Database not configured (missing SUPABASE_URL)",
     cloudLoadError:"Couldn't load the recipes. Check your connection and try again.",
     cloudSaveError:"Couldn't save. Check your connection and try again."
   },
@@ -122,16 +104,7 @@ const STRINGS = {
     nameRequiredAlert:"Add meg az étel nevét legalább egy nyelven.",
     langName_es:"spanyol", langName_en:"angol", langName_hu:"magyar",
     fallbackNotice:"{lang} nyelven jelenik meg — erre a nyelvre még nincs fordítás.",
-    authTitle:"Receptkönyvem",
-    authSubtitle:"Jelentkezz be, vagy hozz létre fiókot, hogy lásd és mentsd a család receptjeit.",
-    emailLabel:"Email", passwordLabel:"Jelszó",
-    loginBtn:"Bejelentkezés", signupBtn:"Fiók létrehozása",
-    toggleToSignup:"Nincs még fiókod? Regisztrálj", toggleToLogin:"Már van fiókod? Jelentkezz be",
-    authFillFields:"Add meg az emailedet és a jelszavadat.",
-    authGenericError:"Valami hiba történt. Ellenőrizd az adataidat, és próbáld újra.",
-    authCheckEmail:"A fiók létrejött. Nézd meg az emailedet a megerősítéshez, mielőtt bejelentkezel.",
-    authNotConfigured:"Ehhez az oldalhoz még nincs beállítva az adatbázis. Add hozzá a Supabase URL-t és kulcsot a kódhoz (keresd meg: SUPABASE_URL).",
-    logoutBtn:"Kijelentkezés",
+    authNotConfigured:"Az adatbázis nincs beállítva (hiányzik a SUPABASE_URL)",
     cloudLoadError:"Nem sikerült betölteni a recepteket. Ellenőrizd a kapcsolatot, és próbáld újra.",
     cloudSaveError:"Nem sikerült menteni. Ellenőrizd a kapcsolatot, és próbáld újra."
   }
@@ -352,7 +325,6 @@ const STARTER_RECIPES = [
 
 const state = {
   lang:"es",
-  isAuthed:false,
   recipes:[],
   mealImages:{},
   currentMeal:null, currentTab:"todos", chipFilter:null, search:"",
@@ -375,9 +347,10 @@ function getContent(r, lang){
   return {lang:null, data:emptyContent()};
 }
 
-/* ================= SUPABASE (cloud database + login, shared by everyone who signs up) =================
+/* ================= SUPABASE (shared cloud database, open access — no login) =================
    1) Create a free project at supabase.com
-   2) Run the setup SQL (see the guide) to create the `recipes` and `app_settings` tables
+   2) Run the setup SQL (see the guide) to create the `recipes` and `app_settings` tables,
+      with policies open to everyone (no login/account needed on either side).
    3) Paste your Project URL and anon public key below — Settings → API in your Supabase project.
       The anon key is meant to be public/embedded in client code; never paste the "service_role" key here. */
 const SUPABASE_URL = "PEGA_AQUI_TU_SUPABASE_URL";
@@ -389,62 +362,7 @@ const supabaseClient = (typeof window.supabase !== "undefined" && SUPABASE_URL.i
 function saveLangPreference(){ try{ localStorage.setItem("recetario_lang", state.lang); }catch(err){} }
 function loadLangPreference(){ try{ return localStorage.getItem("recetario_lang"); }catch(err){ return null; } }
 
-/* ---- Auth ---- */
-let authMode = "login"; // "login" | "signup"
-function toggleAuthMode(){
-  authMode = authMode==="login" ? "signup" : "login";
-  document.getElementById("authSubmitBtn").textContent = t(authMode==="login" ? "loginBtn" : "signupBtn");
-  document.getElementById("authToggleBtn").textContent = t(authMode==="login" ? "toggleToSignup" : "toggleToLogin");
-  const errEl = document.getElementById("authError");
-  errEl.textContent = ""; errEl.style.color = "";
-}
-async function submitAuth(){
-  const errEl = document.getElementById("authError");
-  errEl.style.color = ""; errEl.textContent = "";
-  if(!supabaseClient){ errEl.textContent = t("authNotConfigured"); return; }
-  const email = document.getElementById("auth_email").value.trim();
-  const password = document.getElementById("auth_password").value;
-  if(!email || !password){ errEl.textContent = t("authFillFields"); return; }
-  const btn = document.getElementById("authSubmitBtn");
-  btn.disabled = true;
-  try{
-    if(authMode==="login"){
-      const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
-      if(error) throw error;
-      // onAuthStateChange picks this up and loads the app.
-    } else {
-      const { data, error } = await supabaseClient.auth.signUp({ email, password });
-      if(error) throw error;
-      if(!data.session){
-        errEl.style.color = "#3E7A34";
-        errEl.textContent = t("authCheckEmail");
-      }
-    }
-  }catch(err){
-    errEl.textContent = err.message || t("authGenericError");
-  }finally{
-    btn.disabled = false;
-  }
-}
-async function logout(){
-  if(!supabaseClient) return;
-  await supabaseClient.auth.signOut();
-}
-async function onAuthReady(session){
-  if(session){
-    state.isAuthed = true;
-    document.getElementById("accountInfo").style.display = "flex";
-    document.getElementById("accountEmail").textContent = session.user.email;
-    await loadCloudData();
-    goHome();
-  } else {
-    state.isAuthed = false;
-    document.getElementById("accountInfo").style.display = "none";
-    showScreen("screen-auth");
-  }
-}
-
-/* ---- Cloud data (shared cookbook: every logged-in user reads/writes the same tables) ---- */
+/* ---- Cloud data (shared cookbook: everyone who opens the site reads/writes the same tables, no login) ---- */
 function rowToRecipe(row){
   return {
     id: row.id,
@@ -519,11 +437,10 @@ function compressImage(file, maxDim, quality){
 function showScreen(id){
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
-  document.getElementById("backBtn").style.display = (id==="screen-home"||id==="screen-auth") ? "none" : "flex";
+  document.getElementById("backBtn").style.display = (id==="screen-home") ? "none" : "flex";
   window.scrollTo(0,0);
 }
 function goHome(){
-  if(!state.isAuthed){ showScreen("screen-auth"); return; }
   state.currentMeal=null; state.activeRecipeId=null; state.editingId=null;
   renderHome(); showScreen("screen-home");
 }
@@ -1089,9 +1006,11 @@ function buildPrintArea(list, title, skipCover){
 state.lang = loadLangPreference() || "es";
 document.querySelectorAll(".lang-switch button").forEach(b=>b.classList.toggle("active", b.dataset.lang===state.lang));
 applyStaticI18n();
+goHome();
 if(supabaseClient){
-  supabaseClient.auth.onAuthStateChange((event, session)=>{ onAuthReady(session); });
+  loadCloudData().then(()=>{ renderHome(); });
 } else {
-  showScreen("screen-auth");
-  document.getElementById("authError").textContent = t("authNotConfigured");
+  const statusEl = document.getElementById("cloudStatus");
+  statusEl.textContent = t("authNotConfigured");
+  statusEl.style.display = "inline-block";
 }

@@ -9,7 +9,7 @@ Libro de recetas virtual (HTML + CSS + JS, sin build ni servidor propio), repart
 - Descarga en PDF (receta suelta o libro completo, con filtro por país/tipo/sano/etc.) usando la función de imprimir del navegador.
 - Selector de idioma ES / EN / HU para toda la interfaz.
 - **Características (etiquetas libres)**: al crear una receta puedes añadir tus propias palabras clave (p. ej. "picante", "vegetariano", "cumpleaños", "sin gluten…") y luego buscar por ellas o por el nombre del plato, todo desde el mismo buscador.
-- **Cuenta y nube (Supabase)**: inicio de sesión con email y contraseña; todas las recetas se guardan en una base de datos real y son las mismas para todos los que inicien sesión — es un recetario familiar compartido, no uno distinto por dispositivo.
+- **Nube compartida, sin login (Supabase)**: todas las recetas se guardan en una base de datos real; se abre directamente en cualquier móvil u ordenador y ya se ve/edita el mismo recetario, sin tener que crear ninguna cuenta ni escribir email o contraseña.
 
 ## Antes de subirlo: configura tu base de datos (Supabase)
 
@@ -43,19 +43,36 @@ La web necesita una base de datos gratuita en [supabase.com](https://supabase.co
    alter table recipes enable row level security;
    alter table app_settings enable row level security;
 
-   create policy "recipes shared read"   on recipes for select to authenticated using (true);
-   create policy "recipes shared insert" on recipes for insert to authenticated with check (true);
-   create policy "recipes shared update" on recipes for update to authenticated using (true);
-   create policy "recipes shared delete" on recipes for delete to authenticated using (true);
+   create policy "recipes public read"   on recipes for select to anon, authenticated using (true);
+   create policy "recipes public insert" on recipes for insert to anon, authenticated with check (true);
+   create policy "recipes public update" on recipes for update to anon, authenticated using (true);
+   create policy "recipes public delete" on recipes for delete to anon, authenticated using (true);
 
-   create policy "settings shared read"   on app_settings for select to authenticated using (true);
-   create policy "settings shared insert" on app_settings for insert to authenticated with check (true);
-   create policy "settings shared update" on app_settings for update to authenticated using (true);
+   create policy "settings public read"   on app_settings for select to anon, authenticated using (true);
+   create policy "settings public insert" on app_settings for insert to anon, authenticated with check (true);
+   create policy "settings public update" on app_settings for update to anon, authenticated using (true);
    ```
 
-   **Si ya habías ejecutado este SQL antes** (en una entrega anterior) y solo te falta la columna nueva de características, en vez de todo lo anterior ejecuta solo esto:
+   **Si ya habías ejecutado el SQL de una entrega anterior** (cuando la web pedía email y contraseña), tus políticas actuales dicen `to authenticated` — con eso, ahora que la web ya no pide login, Supabase rechazaría todas las peticiones. Ejecuta esto para ponerlas al día (borra las políticas antiguas y crea las nuevas, sin tocar tus recetas ya guardadas):
 
    ```sql
+   drop policy if exists "recipes shared read" on recipes;
+   drop policy if exists "recipes shared insert" on recipes;
+   drop policy if exists "recipes shared update" on recipes;
+   drop policy if exists "recipes shared delete" on recipes;
+   drop policy if exists "settings shared read" on app_settings;
+   drop policy if exists "settings shared insert" on app_settings;
+   drop policy if exists "settings shared update" on app_settings;
+
+   create policy "recipes public read"   on recipes for select to anon, authenticated using (true);
+   create policy "recipes public insert" on recipes for insert to anon, authenticated with check (true);
+   create policy "recipes public update" on recipes for update to anon, authenticated using (true);
+   create policy "recipes public delete" on recipes for delete to anon, authenticated using (true);
+
+   create policy "settings public read"   on app_settings for select to anon, authenticated using (true);
+   create policy "settings public insert" on app_settings for insert to anon, authenticated with check (true);
+   create policy "settings public update" on app_settings for update to anon, authenticated using (true);
+
    alter table recipes add column if not exists tags text[] default '{}';
    ```
 
@@ -69,7 +86,7 @@ La web necesita una base de datos gratuita en [supabase.com](https://supabase.co
 
    Sustituye los textos entre comillas por tu Project URL y tu clave anon, y guarda el archivo.
 
-Con eso, la primera persona que se registre en la web verá las 3 recetas de ejemplo cargarse automáticamente en la base de datos, y a partir de ahí todo lo que cree cualquier usuario logueado se guarda y comparte con el resto.
+Con eso, en cuanto alguien abra la web por primera vez se cargarán solas las 3 recetas de ejemplo en la base de datos, y a partir de ahí todo lo que cree o edite cualquier persona que abra el enlace se guarda y se ve igual desde cualquier otro móvil u ordenador — sin ningún paso de login.
 
 ## Cómo verlo en local
 
@@ -104,19 +121,16 @@ Si ya tienes el repositorio clonado en GitHub Desktop, es incluso más rápido q
 
 En un par de minutos la web en GitHub Pages recoge el cambio automáticamente — no hace falta hacer nada más en Settings → Pages, eso ya quedó configurado la primera vez.
 
-## Sobre el guardado de datos (nube compartida)
+## Sobre el guardado de datos (nube compartida, sin login)
 
 Ya no se usa el almacenamiento del navegador: los datos viven en tu proyecto de Supabase (plan gratuito), no en el dispositivo. Esto significa:
 
-- Todos los que inicien sesión ven y pueden editar las mismas recetas — pensado para que la familia entera comparta un único recetario, desde cualquier móvil u ordenador.
-- Las fotos se comprimen automáticamente antes de guardarse (igual que antes), así que ocupan poco espacio en la base de datos.
+- Cualquiera que abra el enlace de la web ve y puede editar las mismas recetas al instante — sin crear cuenta, sin escribir email ni contraseña. Perfecto para que tú y tu novia (o cualquiera de la familia) lo tengáis siempre sincronizado entre móviles.
+- Las fotos se comprimen automáticamente antes de guardarse, así que ocupan poco espacio en la base de datos.
 - El plan gratuito de Supabase incluye 500 MB de base de datos — de sobra para miles de recetas con foto.
 
 ### Importante: quién puede entrar
 
-Mientras el registro esté abierto, cualquier persona que descubra la URL de tu web puede crear una cuenta y ver/editar todas las recetas (es un recetario compartido, no hay recetas privadas por usuario). Si quieres cerrarlo una vez que toda la familia se haya registrado:
+Al no haber login, **cualquier persona que descubra la URL de tu web puede ver, crear, editar o borrar cualquier receta** — no hay ninguna barrera. Para un recetario familiar esto suele ser aceptable (nadie va a adivinar la dirección exacta de tu GitHub Pages), pero ten en cuenta que no es privado: si compartes el enlace con alguien, esa persona tiene el mismo control que tú sobre todas las recetas.
 
-1. En Supabase, ve a **Authentication → Settings** (o **Providers**, según la versión).
-2. Desactiva la opción que permite **registro de nuevos usuarios** ("Allow new users to sign up" / "Enable sign ups").
-
-Con eso, solo podrán iniciar sesión las cuentas que ya existan; nadie nuevo podrá registrarse aunque tenga el enlace.
+Si más adelante prefieres añadir una barrera de entrada (una contraseña compartida, o cuentas individuales), dímelo y lo añadimos — es un cambio más grande que requiere tocar tanto la web como la configuración de Supabase.
