@@ -7,7 +7,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
   --yellow:#EFC24C;
@@ -62,7 +61,20 @@ input,select,textarea{font-family:inherit;}
   border:none;background:transparent;padding:6px 11px;border-radius:999px;font-size:12.5px;font-weight:700;color:var(--gray);letter-spacing:.3px;
 }
 .lang-switch button.active{background:var(--yellow);color:var(--charcoal);}
-.cloud-status{font-size:12px;font-weight:600;color:#B4432A;background:#FCE3D6;padding:6px 12px;border-radius:999px;}
+
+/* ---------- Sync box (manual GitHub JSON sync) ---------- */
+.sync-box{max-width:560px;margin:44px auto 0;background:var(--white);border-radius:var(--radius);padding:26px 28px;box-shadow:var(--shadow);border:1px solid rgba(51,49,43,.06);text-align:left;}
+.sync-box h3{font-family:var(--font-head);font-weight:800;font-size:18px;margin:0 0 8px;}
+.sync-box .sync-hint{font-size:13px;color:var(--gray);line-height:1.55;margin:0 0 18px;}
+.sync-fields{display:grid;grid-template-columns:1fr 1fr 90px;gap:10px;}
+@media(max-width:560px){.sync-fields{grid-template-columns:1fr;}}
+.sync-box .field{margin-bottom:12px;}
+.sync-box label{display:block;font-size:12px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.3px;margin-bottom:5px;}
+.sync-box input{width:100%;padding:10px 12px;border-radius:var(--radius-sm);border:1px solid rgba(51,49,43,.18);font-size:14px;}
+.sync-token-hint{font-size:11.5px;color:var(--gray-light);line-height:1.5;margin:-6px 0 16px;}
+.sync-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px;}
+.sync-actions button{flex:1;min-width:150px;padding:11px 14px;font-size:13px;}
+.sync-status{margin-top:14px;font-size:13px;font-weight:600;min-height:18px;}
 
 /* ---------- Screens ---------- */
 .screen{display:none;flex:1;padding:32px 24px 80px;animation:fade .25s ease;}
@@ -286,7 +298,6 @@ input,select,textarea{font-family:inherit;}
     </div>
     <div class="topbar-actions">
       <button class="back-btn" id="backBtn" style="display:none" onclick="goHome()">← <span data-i18n="back">Inicio</span></button>
-      <div class="cloud-status" id="cloudStatus" style="display:none"></div>
       <div class="lang-switch">
         <button data-lang="es" onclick="setLang('es')">ES</button>
         <button data-lang="en" onclick="setLang('en')">EN</button>
@@ -306,6 +317,35 @@ input,select,textarea{font-family:inherit;}
     <div class="meal-grid" id="mealGrid"></div>
     <div class="home-footer">
       <button class="ghost-btn" onclick="openDownloadModal(null)">⬇️ <span data-i18n="downloadBook">Descargar libro completo en PDF</span></button>
+      <div class="sync-box">
+        <h3 data-i18n="syncTitle">Sincronización online</h3>
+        <p class="sync-hint" data-i18n="syncHint">Guarda una copia de los datos de este dispositivo en tu propio repositorio de GitHub (en un archivo sync/datos.json), para poder traerla a otro móvil u ordenador. No hace falta contratar ningún servidor: se usa tu cuenta de GitHub. Cada dispositivo decide cuándo subir y cuándo traer; no es automático ni en tiempo real.</p>
+        <div class="sync-fields">
+          <div class="field">
+            <label data-i18n="syncOwner">Usuario/organización</label>
+            <input type="text" id="sync_owner" placeholder="tu-usuario">
+          </div>
+          <div class="field">
+            <label data-i18n="syncRepo">Repositorio</label>
+            <input type="text" id="sync_repo" placeholder="tu-repo">
+          </div>
+          <div class="field">
+            <label data-i18n="syncBranch">Rama</label>
+            <input type="text" id="sync_branch" value="main">
+          </div>
+        </div>
+        <div class="field">
+          <label data-i18n="syncToken">Token de GitHub (con permiso de lectura/escritura de contenidos de este repositorio)</label>
+          <input type="password" id="sync_token" placeholder="ghp_…" autocomplete="off">
+        </div>
+        <p class="sync-token-hint" data-i18n="syncTokenHint">El token se crea en GitHub → Settings → Developer settings → Fine-grained tokens, dándole permiso de Contents: Read and write solo en este repositorio. Se guarda únicamente en este dispositivo, nunca se sube a ningún sitio.</p>
+        <div class="sync-actions">
+          <button type="button" class="ghost-btn" onclick="saveSyncConfig()" data-i18n="syncSaveBtn">Guardar estos datos de conexión</button>
+          <button type="button" class="save-btn" onclick="syncUpload()" data-i18n="syncUploadBtn">Subir mis datos a la nube</button>
+          <button type="button" class="ghost-btn" onclick="syncDownload()" data-i18n="syncDownloadBtn">Traer datos de la nube</button>
+        </div>
+        <div class="sync-status" id="syncStatus"></div>
+      </div>
     </div>
   </section>
   <input type="file" id="mealImageInput" accept="image/*" style="display:none" onchange="onMealImageSelect(event)">

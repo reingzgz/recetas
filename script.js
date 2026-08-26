@@ -32,9 +32,19 @@ const STRINGS = {
     nameRequiredAlert:"Escribe al menos el nombre del plato en algún idioma.",
     langName_es:"español", langName_en:"inglés", langName_hu:"húngaro",
     fallbackNotice:"Mostrando en {lang} — todavía no hay traducción a este idioma.",
-    authNotConfigured:"Base de datos no configurada (falta SUPABASE_URL)",
-    cloudLoadError:"No se han podido cargar las recetas. Comprueba tu conexión e inténtalo de nuevo.",
-    cloudSaveError:"No se ha podido guardar. Comprueba tu conexión e inténtalo de nuevo."
+    syncTitle:"Sincronización online",
+    syncHint:"Guarda una copia de los datos de este dispositivo en tu propio repositorio de GitHub (en un archivo sync/datos.json), para poder traerla a otro móvil u ordenador. No hace falta contratar ningún servidor: se usa tu cuenta de GitHub. Cada dispositivo decide cuándo subir y cuándo traer; no es automático ni en tiempo real.",
+    syncOwner:"Usuario/organización", syncRepo:"Repositorio", syncBranch:"Rama",
+    syncToken:"Token de GitHub (con permiso de lectura/escritura de contenidos de este repositorio)",
+    syncTokenHint:"El token se crea en GitHub → Settings → Developer settings → Fine-grained tokens, dándole permiso de Contents: Read and write solo en este repositorio. Se guarda únicamente en este dispositivo, nunca se sube a ningún sitio.",
+    syncSaveBtn:"Guardar estos datos de conexión", syncUploadBtn:"Subir mis datos a la nube", syncDownloadBtn:"Traer datos de la nube",
+    syncConfigured:"Datos de conexión guardados en este dispositivo.", syncNotConfigured:"Sin configurar todavía.",
+    syncFillFields:"Rellena usuario, repositorio y token antes de continuar.",
+    syncSaved:"Datos de conexión guardados en este dispositivo.",
+    syncUploading:"Subiendo…", syncDownloading:"Trayendo datos…",
+    syncUploadOk:"Subido correctamente.", syncDownloadOk:"Datos traídos correctamente.",
+    syncNothingToDownload:"Todavía no hay ningún dato subido a ese repositorio.",
+    syncError:"Algo ha fallado."
   },
   en:{
     appTitle:"My Recipe Book", back:"Home",
@@ -68,9 +78,19 @@ const STRINGS = {
     nameRequiredAlert:"Please enter the dish name in at least one language.",
     langName_es:"Spanish", langName_en:"English", langName_hu:"Hungarian",
     fallbackNotice:"Showing in {lang} — no translation for this language yet.",
-    authNotConfigured:"Database not configured (missing SUPABASE_URL)",
-    cloudLoadError:"Couldn't load the recipes. Check your connection and try again.",
-    cloudSaveError:"Couldn't save. Check your connection and try again."
+    syncTitle:"Online sync",
+    syncHint:"Save a copy of this device's data to your own GitHub repository (in a sync/datos.json file), so you can bring it to another phone or computer. No server needed — it uses your GitHub account. Each device decides when to upload and when to fetch; it's not automatic or real-time.",
+    syncOwner:"Owner/organisation", syncRepo:"Repository", syncBranch:"Branch",
+    syncToken:"GitHub token (with read/write contents permission on this repository)",
+    syncTokenHint:"Create the token in GitHub → Settings → Developer settings → Fine-grained tokens, granting Contents: Read and write on this repository only. It's stored only on this device, never uploaded anywhere.",
+    syncSaveBtn:"Save these connection details", syncUploadBtn:"Upload my data to the cloud", syncDownloadBtn:"Fetch data from the cloud",
+    syncConfigured:"Connection details saved on this device.", syncNotConfigured:"Not set up yet.",
+    syncFillFields:"Fill in the owner, repository and token first.",
+    syncSaved:"Connection details saved on this device.",
+    syncUploading:"Uploading…", syncDownloading:"Fetching data…",
+    syncUploadOk:"Uploaded successfully.", syncDownloadOk:"Data fetched successfully.",
+    syncNothingToDownload:"There's no data uploaded to that repository yet.",
+    syncError:"Something went wrong."
   },
   hu:{
     appTitle:"Receptkönyvem", back:"Kezdőlap",
@@ -104,9 +124,19 @@ const STRINGS = {
     nameRequiredAlert:"Add meg az étel nevét legalább egy nyelven.",
     langName_es:"spanyol", langName_en:"angol", langName_hu:"magyar",
     fallbackNotice:"{lang} nyelven jelenik meg — erre a nyelvre még nincs fordítás.",
-    authNotConfigured:"Az adatbázis nincs beállítva (hiányzik a SUPABASE_URL)",
-    cloudLoadError:"Nem sikerült betölteni a recepteket. Ellenőrizd a kapcsolatot, és próbáld újra.",
-    cloudSaveError:"Nem sikerült menteni. Ellenőrizd a kapcsolatot, és próbáld újra."
+    syncTitle:"Online szinkronizálás",
+    syncHint:"Elmenti ennek az eszköznek az adatait a saját GitHub tárolódba (egy sync/datos.json fájlba), hogy átvihesd egy másik telefonra vagy számítógépre. Nincs szükség szerverre — a GitHub fiókodat használja. Minden eszköz maga dönti el, mikor tölt fel és mikor kér le; nem automatikus és nem valós idejű.",
+    syncOwner:"Felhasználó/szervezet", syncRepo:"Tároló (repository)", syncBranch:"Branch",
+    syncToken:"GitHub token (ehhez a tárolóhoz olvasási/írási jogosultsággal)",
+    syncTokenHint:"A tokent a GitHub → Settings → Developer settings → Fine-grained tokens alatt hozd létre, csak ehhez a tárolóhoz adva Contents: Read and write jogot. Csak ezen az eszközön tárolódik, sehova máshova nem kerül feltöltésre.",
+    syncSaveBtn:"Kapcsolati adatok mentése", syncUploadBtn:"Adataim feltöltése a felhőbe", syncDownloadBtn:"Adatok letöltése a felhőből",
+    syncConfigured:"A kapcsolati adatok elmentve ezen az eszközön.", syncNotConfigured:"Még nincs beállítva.",
+    syncFillFields:"Add meg a felhasználót, a tárolót és a tokent.",
+    syncSaved:"A kapcsolati adatok elmentve ezen az eszközön.",
+    syncUploading:"Feltöltés…", syncDownloading:"Adatok letöltése…",
+    syncUploadOk:"Sikeresen feltöltve.", syncDownloadOk:"Adatok sikeresen letöltve.",
+    syncNothingToDownload:"Ebben a tárolóban még nincs feltöltött adat.",
+    syncError:"Valami hiba történt."
   }
 };
 const MEAL_TYPES = ["desayuno","vermut","comida","merienda","cena"];
@@ -347,64 +377,143 @@ function getContent(r, lang){
   return {lang:null, data:emptyContent()};
 }
 
-/* ================= SUPABASE (shared cloud database, open access — no login) =================
-   1) Create a free project at supabase.com
-   2) Run the setup SQL (see the guide) to create the `recipes` and `app_settings` tables,
-      with policies open to everyone (no login/account needed on either side).
-   3) Paste your Project URL and anon public key below — Settings → API in your Supabase project.
-      The anon key is meant to be public/embedded in client code; never paste the "service_role" key here. */
-const SUPABASE_URL = "PEGA_AQUI_TU_SUPABASE_URL";
-const SUPABASE_ANON_KEY = "PEGA_AQUI_TU_SUPABASE_ANON_KEY";
-const supabaseClient = (typeof window.supabase !== "undefined" && SUPABASE_URL.indexOf("http") === 0)
-  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-  : null;
-
 function saveLangPreference(){ try{ localStorage.setItem("recetario_lang", state.lang); }catch(err){} }
 function loadLangPreference(){ try{ return localStorage.getItem("recetario_lang"); }catch(err){ return null; } }
 
-/* ---- Cloud data (shared cookbook: everyone who opens the site reads/writes the same tables, no login) ---- */
-function rowToRecipe(row){
-  return {
-    id: row.id,
-    mealTypes: row.meal_types || [],
-    country: row.country || "",
-    healthy: !!row.healthy,
-    temp: row.temp || "",
-    prepTime: row.prep_time,
-    servings: row.servings || 4,
-    image: row.image || "",
-    emoji: row.emoji || "🍽️",
-    i18n: row.i18n || {},
-    tags: row.tags || []
-  };
-}
-function recipeToRow(r){
-  return {
-    meal_types: r.mealTypes, country: r.country, healthy: r.healthy, temp: r.temp,
-    prep_time: r.prepTime, servings: r.servings, image: r.image, emoji: r.emoji, i18n: r.i18n,
-    tags: r.tags || []
-  };
-}
-async function seedStarterRecipes(){
-  const { error } = await supabaseClient.from("recipes").insert(STARTER_RECIPES.map(recipeToRow));
-  if(error) console.error("No se pudieron crear las recetas de ejemplo:", error);
-}
-async function loadCloudData(){
+/* ================= LOCAL STORAGE (this device's own copy) ================= */
+const STORAGE_KEY = "recetario_data_v2";
+let _nextId = 1;
+function saveState(){
   try{
-    const { data: recipeRows, error: recErr } = await supabaseClient.from("recipes").select("*").order("id");
-    if(recErr) throw recErr;
-    if(recipeRows.length === 0){
-      await seedStarterRecipes();
-      return loadCloudData();
-    }
-    state.recipes = recipeRows.map(rowToRecipe);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ recipes: state.recipes, mealImages: state.mealImages, nextId: _nextId }));
+  }catch(err){ console.warn("No se pudo guardar en este navegador:", err); }
+}
+function loadState(){
+  let saved = null;
+  try{ saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null"); }catch(err){ saved = null; }
+  if(saved && Array.isArray(saved.recipes)){
+    state.recipes = saved.recipes;
+    state.mealImages = saved.mealImages || {};
+    _nextId = saved.nextId || (Math.max(0, ...saved.recipes.map(r=>r.id||0)) + 1);
+  } else {
+    // First time opening this device: seed with the starter recipes.
+    state.recipes = STARTER_RECIPES.map(r => ({ ...r, id: _nextId++ }));
+    state.mealImages = {};
+    saveState();
+  }
+}
 
-    const { data: settingsRow, error: setErr } = await supabaseClient.from("app_settings").select("*").eq("id","shared").maybeSingle();
-    if(setErr) throw setErr;
-    state.mealImages = (settingsRow && settingsRow.meal_images) || {};
+/* ================= SINCRONIZACIÓN ONLINE (manual, vía GitHub — sin servidor propio) =================
+   Cada dispositivo guarda sus datos en su propio navegador (arriba). Este panel permite además subir
+   una copia a un archivo `sync/datos.json` dentro de tu propio repositorio de GitHub, y traerla de vuelta
+   en otro dispositivo — no es automático ni en tiempo real, cada uno decide cuándo subir/traer. */
+const SYNC_CONFIG_KEY = "recetario_sync_config";
+const SYNC_PATH = "sync/datos.json";
+function loadSyncConfig(){
+  try{ return JSON.parse(localStorage.getItem(SYNC_CONFIG_KEY) || "null") || {}; }catch(err){ return {}; }
+}
+function fillSyncFormFromConfig(){
+  const c = loadSyncConfig();
+  document.getElementById("sync_owner").value = c.owner || "";
+  document.getElementById("sync_repo").value = c.repo || "";
+  document.getElementById("sync_branch").value = c.branch || "main";
+  document.getElementById("sync_token").value = c.token || "";
+  renderSyncStatus(c.owner && c.repo && c.token ? t("syncConfigured") : t("syncNotConfigured"), false);
+}
+function readSyncFormConfig(){
+  return {
+    owner: document.getElementById("sync_owner").value.trim(),
+    repo: document.getElementById("sync_repo").value.trim(),
+    branch: document.getElementById("sync_branch").value.trim() || "main",
+    token: document.getElementById("sync_token").value.trim()
+  };
+}
+function saveSyncConfig(){
+  const c = readSyncFormConfig();
+  if(!c.owner || !c.repo || !c.token){ renderSyncStatus(t("syncFillFields"), true); return; }
+  localStorage.setItem(SYNC_CONFIG_KEY, JSON.stringify(c));
+  renderSyncStatus(t("syncSaved"), false);
+}
+function renderSyncStatus(msg, isError){
+  const el = document.getElementById("syncStatus");
+  if(!el) return;
+  el.textContent = msg;
+  el.style.color = isError ? "#B4432A" : "#3E7A34";
+}
+// UTF-8-safe base64 helpers (recipe text has accents/emoji, plain btoa/atob only handle Latin1).
+function utf8ToBase64(str){
+  return btoa(unescape(encodeURIComponent(str)));
+}
+function base64ToUtf8(b64){
+  return decodeURIComponent(escape(atob(b64.replace(/\n/g,""))));
+}
+async function githubApi(path, config, options){
+  const res = await fetch(`https://api.github.com/repos/${config.owner}/${config.repo}/contents/${path}`, {
+    ...options,
+    headers: {
+      "Authorization": `Bearer ${config.token}`,
+      "Accept": "application/vnd.github+json",
+      ...(options && options.headers ? options.headers : {})
+    }
+  });
+  return res;
+}
+async function syncUpload(){
+  const config = readSyncFormConfig();
+  if(!config.owner || !config.repo || !config.token){ renderSyncStatus(t("syncFillFields"), true); return; }
+  saveSyncConfig();
+  renderSyncStatus(t("syncUploading"), false);
+  try{
+    // Need the file's current sha to update it (if it already exists); a 404 means it's the first upload.
+    let sha = null;
+    const getRes = await githubApi(`${SYNC_PATH}?ref=${encodeURIComponent(config.branch)}`, config, { method:"GET" });
+    if(getRes.ok){
+      const info = await getRes.json();
+      sha = info.sha;
+    } else if(getRes.status !== 404){
+      throw new Error(`GitHub respondió ${getRes.status} al comprobar el archivo`);
+    }
+    const payload = { recipes: state.recipes, mealImages: state.mealImages, nextId: _nextId, updatedAt: new Date().toISOString() };
+    const body = {
+      message: "Actualizar recetas (sincronización desde " + t("appTitle") + ")",
+      content: utf8ToBase64(JSON.stringify(payload, null, 2)),
+      branch: config.branch
+    };
+    if(sha) body.sha = sha;
+    const putRes = await githubApi(SYNC_PATH, config, { method:"PUT", headers:{"Content-Type":"application/json"}, body: JSON.stringify(body) });
+    if(!putRes.ok){
+      const errBody = await putRes.json().catch(()=>({}));
+      throw new Error(errBody.message || `GitHub respondió ${putRes.status}`);
+    }
+    renderSyncStatus(t("syncUploadOk"), false);
   }catch(err){
-    console.error("Error cargando datos de la nube:", err);
-    alert(t("cloudLoadError"));
+    console.error("Error subiendo a GitHub:", err);
+    renderSyncStatus(t("syncError") + (err.message ? " (" + err.message + ")" : ""), true);
+  }
+}
+async function syncDownload(){
+  const config = readSyncFormConfig();
+  if(!config.owner || !config.repo || !config.token){ renderSyncStatus(t("syncFillFields"), true); return; }
+  saveSyncConfig();
+  renderSyncStatus(t("syncDownloading"), false);
+  try{
+    const getRes = await githubApi(`${SYNC_PATH}?ref=${encodeURIComponent(config.branch)}`, config, { method:"GET" });
+    if(getRes.status === 404){ renderSyncStatus(t("syncNothingToDownload"), true); return; }
+    if(!getRes.ok){
+      const errBody = await getRes.json().catch(()=>({}));
+      throw new Error(errBody.message || `GitHub respondió ${getRes.status}`);
+    }
+    const info = await getRes.json();
+    const payload = JSON.parse(base64ToUtf8(info.content));
+    state.recipes = payload.recipes || [];
+    state.mealImages = payload.mealImages || {};
+    _nextId = payload.nextId || (Math.max(0, ...state.recipes.map(r=>r.id||0)) + 1);
+    saveState();
+    renderHome();
+    renderSyncStatus(t("syncDownloadOk"), false);
+  }catch(err){
+    console.error("Error trayendo datos de GitHub:", err);
+    renderSyncStatus(t("syncError") + (err.message ? " (" + err.message + ")" : ""), true);
   }
 }
 /* Downscale + re-encode an uploaded photo before turning it into a data URL, so a phone photo
@@ -518,12 +627,9 @@ async function onMealImageSelect(e){
   try{
     state.mealImages[key] = await compressImage(file, 300, 0.8);
     renderHome();
-    const { error } = await supabaseClient.from("app_settings")
-      .upsert({ id: "shared", meal_images: state.mealImages, updated_at: new Date().toISOString() }, { onConflict: "id" });
-    if(error) throw error;
+    saveState();
   }catch(err){
-    console.error("No se pudo guardar la imagen en la nube:", err);
-    alert(t("cloudSaveError"));
+    console.warn("No se pudo procesar la imagen:", err);
   }
 }
 
@@ -713,16 +819,10 @@ function changeServings(id,delta){
 function toggleIngredient(i){
   document.getElementById("ingrow-"+i).classList.toggle("checked");
 }
-async function deleteRecipe(id){
-  try{
-    const { error } = await supabaseClient.from("recipes").delete().eq("id", id);
-    if(error) throw error;
-    state.recipes = state.recipes.filter(r=>r.id!==id);
-    goHome();
-  }catch(err){
-    console.error("No se pudo eliminar la receta:", err);
-    alert(t("cloudSaveError"));
-  }
+function deleteRecipe(id){
+  state.recipes = state.recipes.filter(r=>r.id!==id);
+  saveState();
+  goHome();
 }
 
 /* ================= FORM ================= */
@@ -867,7 +967,7 @@ async function onImageSelect(e){
   }
 }
 
-async function saveRecipe(e){
+function saveRecipe(e){
   e.preventDefault();
   commitContentTab();
   const i18nData = {};
@@ -901,29 +1001,17 @@ async function saveRecipe(e){
     i18n: i18nData,
     tags: state.tagDraft.slice()
   };
-  const saveBtn = document.querySelector("#recipeForm .save-btn");
-  if(saveBtn) saveBtn.disabled = true;
-  try{
-    if(state.editingId){
-      const { data: updated, error } = await supabaseClient.from("recipes")
-        .update(recipeToRow(data)).eq("id", state.editingId).select().single();
-      if(error) throw error;
-      const idx = state.recipes.findIndex(r=>r.id===state.editingId);
-      state.recipes[idx] = rowToRecipe(updated);
-      openRecipe(state.editingId);
-    } else {
-      const { data: inserted, error } = await supabaseClient.from("recipes")
-        .insert(recipeToRow(data)).select().single();
-      if(error) throw error;
-      const newRecipe = rowToRecipe(inserted);
-      state.recipes.push(newRecipe);
-      openRecipe(newRecipe.id);
-    }
-  }catch(err){
-    console.error("No se pudo guardar la receta:", err);
-    alert(t("cloudSaveError"));
-  }finally{
-    if(saveBtn) saveBtn.disabled = false;
+  if(state.editingId){
+    const idx = state.recipes.findIndex(r=>r.id===state.editingId);
+    data.id = state.editingId;
+    state.recipes[idx] = data;
+    saveState();
+    openRecipe(state.editingId);
+  } else {
+    data.id = _nextId++;
+    state.recipes.push(data);
+    saveState();
+    openRecipe(data.id);
   }
   return false;
 }
@@ -1005,12 +1093,7 @@ function buildPrintArea(list, title, skipCover){
 /* ================= INIT ================= */
 state.lang = loadLangPreference() || "es";
 document.querySelectorAll(".lang-switch button").forEach(b=>b.classList.toggle("active", b.dataset.lang===state.lang));
+loadState();
 applyStaticI18n();
 goHome();
-if(supabaseClient){
-  loadCloudData().then(()=>{ renderHome(); });
-} else {
-  const statusEl = document.getElementById("cloudStatus");
-  statusEl.textContent = t("authNotConfigured");
-  statusEl.style.display = "inline-block";
-}
+fillSyncFormFromConfig();
