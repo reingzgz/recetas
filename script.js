@@ -1,7 +1,7 @@
 /* ================= I18N ================= */
 const STRINGS = {
   es:{
-    appTitle:"Mi Libro de Recetas", back:"Inicio",
+    appTitle:"Mi Libro de Recetas", back:"Atrás",
     heroTitle:"¿Qué te apetece cocinar hoy?",
     heroSub:"Guarda tus recetas favoritas, organízalas y descárgalas en PDF cuando quieras.",
     createRecipe:"Crear receta", whatToEat:"¿Qué quiero comer?",
@@ -46,11 +46,20 @@ const STRINGS = {
     syncNothingToDownload:"Todavía no hay ningún dato subido a ese repositorio.",
     syncError:"Algo ha fallado.",
     quickSyncBtn:"Subir a la nube",
+    quickSyncDownloadBtn:"Traer de la nube",
     quickSyncNotConfigured:"Configura la sincronización desde Inicio antes de subir.",
-    confirmDeleteRecipe:"¿Seguro que quieres eliminar esta receta? Esta acción no se puede deshacer."
+    confirmDeleteRecipe:"¿Seguro que quieres eliminar esta receta? Esta acción no se puede deshacer.",
+    confirmSyncDownload:"Esto sustituirá todas las recetas de este dispositivo por las que hay guardadas en la nube. ¿Continuar?",
+    autoTranslateBtn:"Traducir automáticamente",
+    autoTranslateHint:"Rellena primero el contenido en un idioma y pulsa aquí para generar una traducción automática en los demás — revísala después, puede tener fallos.",
+    autoTranslating:"Traduciendo…",
+    autoTranslateNoSource:"Escribe primero el nombre del plato en algún idioma.",
+    autoTranslateNothingToDo:"Ya hay contenido en los demás idiomas — no se ha sobrescrito nada.",
+    autoTranslateDone:"Traducción generada. Revísala antes de guardar.",
+    autoTranslateDoneWithErrors:"Traducción generada, pero algunas partes no se han podido traducir — revísalas antes de guardar."
   },
   en:{
-    appTitle:"My Recipe Book", back:"Home",
+    appTitle:"My Recipe Book", back:"Back",
     heroTitle:"What are you in the mood to cook today?",
     heroSub:"Save your favourite recipes, organise them and download them as a PDF whenever you like.",
     createRecipe:"Create recipe", whatToEat:"What do I want to eat?",
@@ -95,11 +104,20 @@ const STRINGS = {
     syncNothingToDownload:"There's no data uploaded to that repository yet.",
     syncError:"Something went wrong.",
     quickSyncBtn:"Upload to cloud",
+    quickSyncDownloadBtn:"Fetch from cloud",
     quickSyncNotConfigured:"Set up sync from Home before uploading.",
-    confirmDeleteRecipe:"Are you sure you want to delete this recipe? This can't be undone."
+    confirmDeleteRecipe:"Are you sure you want to delete this recipe? This can't be undone.",
+    confirmSyncDownload:"This will replace every recipe on this device with whatever is saved in the cloud. Continue?",
+    autoTranslateBtn:"Auto-translate",
+    autoTranslateHint:"Fill in the content in one language first, then tap here to auto-generate a translation for the others — review it afterwards, it can have mistakes.",
+    autoTranslating:"Translating…",
+    autoTranslateNoSource:"Write the dish name in at least one language first.",
+    autoTranslateNothingToDo:"The other languages already have content — nothing was overwritten.",
+    autoTranslateDone:"Translation generated. Review it before saving.",
+    autoTranslateDoneWithErrors:"Translation generated, but some parts couldn't be translated — please check them before saving."
   },
   hu:{
-    appTitle:"Receptkönyvem", back:"Kezdőlap",
+    appTitle:"Receptkönyvem", back:"Vissza",
     heroTitle:"Mihez lenne kedved ma főzni?",
     heroSub:"Mentsd el kedvenc recepteidet, rendszerezd őket, és töltsd le PDF-ben bármikor.",
     createRecipe:"Recept létrehozása", whatToEat:"Mit szeretnék enni?",
@@ -144,8 +162,17 @@ const STRINGS = {
     syncNothingToDownload:"Ebben a tárolóban még nincs feltöltött adat.",
     syncError:"Valami hiba történt.",
     quickSyncBtn:"Feltöltés a felhőbe",
+    quickSyncDownloadBtn:"Letöltés a felhőből",
     quickSyncNotConfigured:"Állítsd be a szinkronizálást a Kezdőlapon feltöltés előtt.",
-    confirmDeleteRecipe:"Biztosan törlöd ezt a receptet? Ez nem vonható vissza."
+    confirmDeleteRecipe:"Biztosan törlöd ezt a receptet? Ez nem vonható vissza.",
+    confirmSyncDownload:"Ez lecseréli az ezen az eszközön lévő összes receptet a felhőben mentettekre. Folytatod?",
+    autoTranslateBtn:"Automatikus fordítás",
+    autoTranslateHint:"Először töltsd ki a tartalmat egy nyelven, majd koppints ide, hogy automatikusan legenerálódjon a fordítás a többi nyelvre — utána nézd át, mert lehetnek benne hibák.",
+    autoTranslating:"Fordítás…",
+    autoTranslateNoSource:"Először írd be az étel nevét legalább egy nyelven.",
+    autoTranslateNothingToDo:"A többi nyelven már van tartalom — nem írtunk felül semmit.",
+    autoTranslateDone:"A fordítás elkészült. Nézd át mentés előtt.",
+    autoTranslateDoneWithErrors:"A fordítás elkészült, de néhány rész nem sikerült — ellenőrizd őket mentés előtt."
   }
 };
 const MEAL_TYPES = ["desayuno","vermut","comida","merienda","cena"];
@@ -561,14 +588,13 @@ async function quickSyncUpload(){
   }
   await doSyncUpload(config, showCloudToast);
 }
-async function syncDownload(){
-  const config = readSyncFormConfig();
-  if(!config.owner || !config.repo || !config.token){ renderSyncStatus(t("syncFillFields"), true); return; }
-  saveSyncConfig();
-  renderSyncStatus(t("syncDownloading"), false);
+// Shared download logic, used by both the sync panel's "Traer datos de la nube" and the quick
+// download button in the topbar. This OVERWRITES local data, so callers should confirm first.
+async function doSyncDownload(config, statusCb){
+  statusCb(t("syncDownloading"), false);
   try{
     const getRes = await githubApi(`${SYNC_PATH}?ref=${encodeURIComponent(config.branch)}`, config, { method:"GET" });
-    if(getRes.status === 404){ renderSyncStatus(t("syncNothingToDownload"), true); return; }
+    if(getRes.status === 404){ statusCb(t("syncNothingToDownload"), true); return false; }
     if(!getRes.ok){
       const errBody = await getRes.json().catch(()=>({}));
       throw new Error(errBody.message || `GitHub respondió ${getRes.status}`);
@@ -579,12 +605,31 @@ async function syncDownload(){
     state.mealImages = payload.mealImages || {};
     _nextId = payload.nextId || (Math.max(0, ...state.recipes.map(r=>r.id||0)) + 1);
     saveState();
-    renderHome();
-    renderSyncStatus(t("syncDownloadOk"), false);
+    goHome();
+    statusCb(t("syncDownloadOk"), false);
+    return true;
   }catch(err){
     console.error("Error trayendo datos de GitHub:", err);
-    renderSyncStatus(t("syncError") + (err.message ? " (" + err.message + ")" : ""), true);
+    statusCb(t("syncError") + (err.message ? " (" + err.message + ")" : ""), true);
+    return false;
   }
+}
+async function syncDownload(){
+  const config = readSyncFormConfig();
+  if(!config.owner || !config.repo || !config.token){ renderSyncStatus(t("syncFillFields"), true); return; }
+  saveSyncConfig();
+  await doSyncDownload(config, renderSyncStatus);
+}
+async function quickSyncDownload(){
+  const config = getActiveSyncConfig();
+  if(!config.owner || !config.repo || !config.token){
+    showCloudToast(t("quickSyncNotConfigured"), true);
+    return;
+  }
+  // Downloading overwrites everything on this device — worth a confirm from a random screen,
+  // where it's easier to tap by accident than from the sync panel itself.
+  if(!confirm(t("confirmSyncDownload"))) return;
+  await doSyncDownload(config, showCloudToast);
 }
 /* Downscale + re-encode an uploaded photo before turning it into a data URL, so a phone photo
    of a few MB becomes a compact image before it's stored in the database. */
@@ -633,6 +678,20 @@ function openRecipe(id){
 function openForm(editId){
   state.editingId = editId || null;
   renderForm(editId); showScreen("screen-form");
+}
+// Returns to the screen the user was on right before the current one, instead of always jumping
+// to Home — e.g. from a recipe's detail back to the filtered list you came from, or from editing
+// a recipe back to that same recipe instead of losing your place.
+function goBack(){
+  const active = document.querySelector(".screen.active");
+  const id = active ? active.id : "screen-home";
+  if(id === "screen-detail"){
+    renderList(); showScreen("screen-list"); // back to the list, keeping its meal/tab/search filters
+  } else if(id === "screen-form" && state.editingId != null){
+    openRecipe(state.editingId); // was editing an existing recipe — return to it
+  } else {
+    goHome(); // screen-list, or screen-form when creating a brand new recipe
+  }
 }
 
 /* ================= LANGUAGE ================= */
@@ -977,6 +1036,78 @@ function renderIngredientRows(){
       <button type="button" class="remove-row-btn" onclick="removeIngredientRow(${i})">✕</button>
     </div>
   `).join("");
+}
+/* ---- Traducción automática (opcional): usa un servicio de traducción gratuito para rellenar los
+   idiomas que dejes en blanco a partir de lo que ya hayas escrito en otro — así no hace falta
+   escribir cada receta 3 veces. La traducción es automática, así que conviene revisarla luego. ---- */
+async function translateText(text, from, to){
+  const clean = (text||"").trim();
+  if(!clean) return "";
+  const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(clean)}&langpair=${from}|${to}`;
+  const res = await fetch(url);
+  if(!res.ok) throw new Error("HTTP " + res.status);
+  const data = await res.json();
+  const out = data && data.responseData && data.responseData.translatedText;
+  if(!out || /MYMEMORY WARNING/i.test(out)) throw new Error("sin traducción disponible");
+  return out;
+}
+// Translates one field; on any failure, falls back to the original text and flags the error via
+// onError() instead of throwing — so one bad field doesn't stop the rest of the recipe.
+async function translateFieldSafe(text, from, to, onError){
+  if(!text) return "";
+  try{ return await translateText(text, from, to); }
+  catch(err){ onError(); return text; }
+}
+function renderAutoTranslateStatus(msg, isError){
+  const el = document.getElementById("autoTranslateStatus");
+  if(!el) return;
+  el.textContent = msg;
+  el.style.color = isError ? "#B4432A" : "#3E7A34";
+}
+async function autoTranslateContent(){
+  commitContentTab();
+  // Prefer the language currently open (if it has content), otherwise the first one that does.
+  const source = (state.contentDraft[state.formContentLang] && (state.contentDraft[state.formContentLang].name||"").trim())
+    ? state.formContentLang
+    : CONTENT_LANGS.find(l => (state.contentDraft[l].name||"").trim());
+  if(!source){
+    renderAutoTranslateStatus(t("autoTranslateNoSource"), true);
+    return;
+  }
+  const targets = CONTENT_LANGS.filter(l => l!==source && !(state.contentDraft[l].name||"").trim());
+  if(!targets.length){
+    renderAutoTranslateStatus(t("autoTranslateNothingToDo"), true);
+    return;
+  }
+  const btn = document.getElementById("autoTranslateBtn");
+  if(btn) btn.disabled = true;
+  renderAutoTranslateStatus(t("autoTranslating"), false);
+  let hadError = false;
+  const src = state.contentDraft[source];
+  const markError = ()=>{ hadError = true; };
+  try{
+    for(const target of targets){ // one target language at a time, to avoid bursting the free API
+      const [name, info, ingredients, steps] = await Promise.all([
+        translateFieldSafe(src.name, source, target, markError),
+        translateFieldSafe(src.info, source, target, markError),
+        Promise.all((src.ingredients||[]).map(async ing => ({
+          name: await translateFieldSafe(ing.name, source, target, markError),
+          qty: ing.qty,
+          unit: await translateFieldSafe(ing.unit, source, target, markError)
+        }))),
+        Promise.all((src.steps||[]).map(step => translateFieldSafe(step, source, target, markError)))
+      ]);
+      state.contentDraft[target] = { name, info, ingredients, steps };
+    }
+  }catch(err){
+    console.error("Error en la traducción automática:", err);
+    hadError = true;
+  }
+  if(btn) btn.disabled = false;
+  loadContentTab(state.formContentLang);
+  renderFormLangTabs();
+  if(hadError) renderAutoTranslateStatus(t("autoTranslateDoneWithErrors"), true);
+  else renderAutoTranslateStatus(t("autoTranslateDone"), false);
 }
 function addIngredientRow(){ state.ingredientDraft.push({name:"",qty:"",unit:""}); renderIngredientRows(); }
 function removeIngredientRow(i){ state.ingredientDraft.splice(i,1); if(!state.ingredientDraft.length) state.ingredientDraft.push({name:"",qty:"",unit:""}); renderIngredientRows(); }

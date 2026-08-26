@@ -1,0 +1,16 @@
+{
+  "name": "Mi Libro de Recetas",
+  "short_name": "Recetas",
+  "description": "Recetario familiar con recetas, PDF y sincronización manual vía GitHub.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#FBF9E7",
+  "theme_color": "#EFC24C",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
