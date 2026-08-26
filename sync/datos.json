@@ -509,7 +509,7 @@
         }
       },
       "id": 2,
-      "_scale": 6
+      "_scale": 3
     },
     {
       "mealTypes": [
@@ -744,17 +744,17 @@
       "mealTypes": [
         "desayuno"
       ],
-      "country": "",
-      "temp": "",
-      "prepTime": null,
-      "servings": 4,
+      "country": "USA",
+      "temp": "caliente",
+      "prepTime": 15,
+      "servings": 2,
       "healthy": false,
       "image": "",
       "emoji": "🍽️",
       "i18n": {
         "es": {
-          "name": "efef",
-          "info": "",
+          "name": "Tortitas",
+          "info": "Y ¿cuál es su origen? Realmente los habitantes de la Antigua Grecia ya comían algo parecido a lo que hoy en día llamamos “tortitas”.",
           "ingredients": [],
           "steps": []
         },
@@ -771,11 +771,14 @@
           "steps": []
         }
       },
-      "tags": [],
-      "id": 4
+      "tags": [
+        "cumpleaños",
+        "domingo felices"
+      ],
+      "id": 5
     }
   ],
   "mealImages": {},
-  "nextId": 5,
-  "updatedAt": "2026-08-26T20:08:16.803Z"
+  "nextId": 6,
+  "updatedAt": "2026-08-26T20:35:20.703Z"
 }
