@@ -739,9 +739,43 @@
       },
       "id": 3,
       "_scale": 14
+    },
+    {
+      "mealTypes": [
+        "desayuno"
+      ],
+      "country": "",
+      "temp": "",
+      "prepTime": null,
+      "servings": 4,
+      "healthy": false,
+      "image": "",
+      "emoji": "🍽️",
+      "i18n": {
+        "es": {
+          "name": "efef",
+          "info": "",
+          "ingredients": [],
+          "steps": []
+        },
+        "en": {
+          "name": "",
+          "info": "",
+          "ingredients": [],
+          "steps": []
+        },
+        "hu": {
+          "name": "",
+          "info": "",
+          "ingredients": [],
+          "steps": []
+        }
+      },
+      "tags": [],
+      "id": 4
     }
   ],
   "mealImages": {},
-  "nextId": 4,
-  "updatedAt": "2026-08-26T20:03:37.441Z"
+  "nextId": 5,
+  "updatedAt": "2026-08-26T20:06:11.208Z"
 }
