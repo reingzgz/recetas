@@ -44,7 +44,10 @@ const STRINGS = {
     syncUploading:"Subiendo…", syncDownloading:"Trayendo datos…",
     syncUploadOk:"Subido correctamente.", syncDownloadOk:"Datos traídos correctamente.",
     syncNothingToDownload:"Todavía no hay ningún dato subido a ese repositorio.",
-    syncError:"Algo ha fallado."
+    syncError:"Algo ha fallado.",
+    quickSyncBtn:"Subir a la nube",
+    quickSyncNotConfigured:"Configura la sincronización desde Inicio antes de subir.",
+    confirmDeleteRecipe:"¿Seguro que quieres eliminar esta receta? Esta acción no se puede deshacer."
   },
   en:{
     appTitle:"My Recipe Book", back:"Home",
@@ -90,7 +93,10 @@ const STRINGS = {
     syncUploading:"Uploading…", syncDownloading:"Fetching data…",
     syncUploadOk:"Uploaded successfully.", syncDownloadOk:"Data fetched successfully.",
     syncNothingToDownload:"There's no data uploaded to that repository yet.",
-    syncError:"Something went wrong."
+    syncError:"Something went wrong.",
+    quickSyncBtn:"Upload to cloud",
+    quickSyncNotConfigured:"Set up sync from Home before uploading.",
+    confirmDeleteRecipe:"Are you sure you want to delete this recipe? This can't be undone."
   },
   hu:{
     appTitle:"Receptkönyvem", back:"Kezdőlap",
@@ -136,7 +142,10 @@ const STRINGS = {
     syncUploading:"Feltöltés…", syncDownloading:"Adatok letöltése…",
     syncUploadOk:"Sikeresen feltöltve.", syncDownloadOk:"Adatok sikeresen letöltve.",
     syncNothingToDownload:"Ebben a tárolóban még nincs feltöltött adat.",
-    syncError:"Valami hiba történt."
+    syncError:"Valami hiba történt.",
+    quickSyncBtn:"Feltöltés a felhőbe",
+    quickSyncNotConfigured:"Állítsd be a szinkronizálást a Kezdőlapon feltöltés előtt.",
+    confirmDeleteRecipe:"Biztosan törlöd ezt a receptet? Ez nem vonható vissza."
   }
 };
 const MEAL_TYPES = ["desayuno","vermut","comida","merienda","cena"];
@@ -450,6 +459,10 @@ function base64ToUtf8(b64){
 async function githubApi(path, config, options){
   const res = await fetch(`https://api.github.com/repos/${config.owner}/${config.repo}/contents/${path}`, {
     ...options,
+    // Force a real network hit: the browser HTTP cache can otherwise silently hand back a stale GET
+    // response (and therefore a stale `sha`), which is what causes the intermittent "does not match" /
+    // 409 error from GitHub when we try to PUT using that outdated sha.
+    cache: "no-store",
     headers: {
       "Authorization": `Bearer ${config.token}`,
       "Accept": "application/vnd.github+json",
@@ -458,38 +471,95 @@ async function githubApi(path, config, options){
   });
   return res;
 }
-async function syncUpload(){
-  const config = readSyncFormConfig();
-  if(!config.owner || !config.repo || !config.token){ renderSyncStatus(t("syncFillFields"), true); return; }
-  saveSyncConfig();
-  renderSyncStatus(t("syncUploading"), false);
+// Fetches the current sha of the sync file, or null if it doesn't exist yet (first upload).
+async function fetchSyncSha(config){
+  const getRes = await githubApi(`${SYNC_PATH}?ref=${encodeURIComponent(config.branch)}`, config, { method:"GET" });
+  if(getRes.ok){
+    const info = await getRes.json();
+    return info.sha;
+  } else if(getRes.status === 404){
+    return null;
+  } else {
+    throw new Error(`GitHub respondió ${getRes.status} al comprobar el archivo`);
+  }
+}
+let _syncBusy = false;
+// Shared upload logic used by both the sync panel button and the quick "upload to cloud" button that
+// now appears on every screen. `statusCb(msg, isError)` is how each caller shows feedback.
+async function doSyncUpload(config, statusCb){
+  if(_syncBusy) return false; // avoid two uploads racing (e.g. a double tap) and tripping the sha check
+  _syncBusy = true;
+  statusCb(t("syncUploading"), false);
   try{
-    // Need the file's current sha to update it (if it already exists); a 404 means it's the first upload.
-    let sha = null;
-    const getRes = await githubApi(`${SYNC_PATH}?ref=${encodeURIComponent(config.branch)}`, config, { method:"GET" });
-    if(getRes.ok){
-      const info = await getRes.json();
-      sha = info.sha;
-    } else if(getRes.status !== 404){
-      throw new Error(`GitHub respondió ${getRes.status} al comprobar el archivo`);
-    }
+    let sha = await fetchSyncSha(config);
     const payload = { recipes: state.recipes, mealImages: state.mealImages, nextId: _nextId, updatedAt: new Date().toISOString() };
-    const body = {
-      message: "Actualizar recetas (sincronización desde " + t("appTitle") + ")",
-      content: utf8ToBase64(JSON.stringify(payload, null, 2)),
-      branch: config.branch
+    const makeBody = (sha)=>{
+      const body = {
+        message: "Actualizar recetas (sincronización desde " + t("appTitle") + ")",
+        content: utf8ToBase64(JSON.stringify(payload, null, 2)),
+        branch: config.branch
+      };
+      if(sha) body.sha = sha;
+      return body;
     };
-    if(sha) body.sha = sha;
-    const putRes = await githubApi(SYNC_PATH, config, { method:"PUT", headers:{"Content-Type":"application/json"}, body: JSON.stringify(body) });
+    let putRes = await githubApi(SYNC_PATH, config, { method:"PUT", headers:{"Content-Type":"application/json"}, body: JSON.stringify(makeBody(sha)) });
+    if(putRes.status === 409){
+      // The file changed between our GET and PUT (another device synced, or a lingering stale sha) —
+      // re-fetch the current sha and retry once instead of failing straight away.
+      sha = await fetchSyncSha(config);
+      putRes = await githubApi(SYNC_PATH, config, { method:"PUT", headers:{"Content-Type":"application/json"}, body: JSON.stringify(makeBody(sha)) });
+    }
     if(!putRes.ok){
       const errBody = await putRes.json().catch(()=>({}));
       throw new Error(errBody.message || `GitHub respondió ${putRes.status}`);
     }
-    renderSyncStatus(t("syncUploadOk"), false);
+    statusCb(t("syncUploadOk"), false);
+    return true;
   }catch(err){
     console.error("Error subiendo a GitHub:", err);
-    renderSyncStatus(t("syncError") + (err.message ? " (" + err.message + ")" : ""), true);
+    statusCb(t("syncError") + (err.message ? " (" + err.message + ")" : ""), true);
+    return false;
+  }finally{
+    _syncBusy = false;
   }
+}
+async function syncUpload(){
+  const config = readSyncFormConfig();
+  if(!config.owner || !config.repo || !config.token){ renderSyncStatus(t("syncFillFields"), true); return; }
+  saveSyncConfig();
+  await doSyncUpload(config, renderSyncStatus);
+}
+// Config used by the quick upload button: reads the on-screen sync form when it's visible (Home),
+// otherwise falls back to whatever was already saved with "Guardar estos datos de conexión".
+function getActiveSyncConfig(){
+  if(document.getElementById("sync_owner")) return readSyncFormConfig();
+  return loadSyncConfig();
+}
+// Small floating toast so the quick upload button can give feedback from any screen, not just Home
+// (where the sync panel's own status line lives).
+function showCloudToast(msg, isError){
+  let el = document.getElementById("cloudToast");
+  if(!el){
+    el = document.createElement("div");
+    el.id = "cloudToast";
+    el.className = "cloud-toast";
+    document.querySelector(".app").appendChild(el);
+  }
+  el.textContent = msg;
+  el.style.background = isError ? "#F6DADA" : "#DCEEDB";
+  el.style.color = isError ? "#B4432A" : "#3E7A34";
+  el.style.border = "1px solid " + (isError ? "rgba(180,67,42,.25)" : "rgba(62,122,52,.25)");
+  el.style.display = "block";
+  clearTimeout(showCloudToast._timer);
+  showCloudToast._timer = setTimeout(()=>{ el.style.display = "none"; }, 4200);
+}
+async function quickSyncUpload(){
+  const config = getActiveSyncConfig();
+  if(!config.owner || !config.repo || !config.token){
+    showCloudToast(t("quickSyncNotConfigured"), true);
+    return;
+  }
+  await doSyncUpload(config, showCloudToast);
 }
 async function syncDownload(){
   const config = readSyncFormConfig();
@@ -820,6 +890,7 @@ function toggleIngredient(i){
   document.getElementById("ingrow-"+i).classList.toggle("checked");
 }
 function deleteRecipe(id){
+  if(!confirm(t("confirmDeleteRecipe"))) return;
   state.recipes = state.recipes.filter(r=>r.id!==id);
   saveState();
   goHome();
