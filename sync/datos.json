@@ -1,0 +1,744 @@
+{
+  "recipes": [
+    {
+      "mealTypes": [
+        "merienda"
+      ],
+      "country": "Argentina",
+      "healthy": false,
+      "temp": "",
+      "prepTime": 75,
+      "servings": 12,
+      "image": "",
+      "emoji": "🍪",
+      "tags": [
+        "dulce",
+        "postre",
+        "para compartir"
+      ],
+      "i18n": {
+        "es": {
+          "name": "Alfajores",
+          "info": "Los alfajores son dulces tradicionales, principalmente de origen español y latinoamericano, que consisten en dos o más tapas de masa unidas por un relleno, comúnmente dulce de leche, y a menudo recubiertos de coco.",
+          "ingredients": [
+            {
+              "name": "Maicena",
+              "qty": 2,
+              "unit": "tazas"
+            },
+            {
+              "name": "Harina",
+              "qty": 2,
+              "unit": "tazas"
+            },
+            {
+              "name": "Polvo para hornear",
+              "qty": 1,
+              "unit": "pizca"
+            },
+            {
+              "name": "Bicarbonato",
+              "qty": 1,
+              "unit": "pizca"
+            },
+            {
+              "name": "Vainilla",
+              "qty": 1,
+              "unit": "pizca"
+            },
+            {
+              "name": "Ralladura de limón",
+              "qty": 1,
+              "unit": "pizca"
+            },
+            {
+              "name": "Huevo",
+              "qty": 1,
+              "unit": ""
+            },
+            {
+              "name": "Yema de huevo",
+              "qty": 1,
+              "unit": ""
+            },
+            {
+              "name": "Coco rallado",
+              "qty": 1,
+              "unit": "cda"
+            },
+            {
+              "name": "Mantequilla",
+              "qty": 100,
+              "unit": "g"
+            },
+            {
+              "name": "Dulce de leche",
+              "qty": 200,
+              "unit": "g"
+            }
+          ],
+          "steps": [
+            "En un bowl mezclar la mantequilla a temperatura ambiente con el azúcar, la vainilla, el limón y los huevos.",
+            "En otro bowl mezclar la harina, maicena, polvo para hornear y bicarbonato, con un poco de sal.",
+            "Tamizar la mezcla de harina sobre la de mantequilla y mezclar hasta lograr una masa quebradiza.",
+            "Amasar sobre la mesa y dejar reposar 1 hora en la nevera.",
+            "Estirar la masa entre dos filminas y cortar formas circulares.",
+            "Hornear a 180°C durante 12 minutos, sin que cojan color.",
+            "Unir de a pares con dulce de leche y rebozar el borde en coco rallado."
+          ]
+        },
+        "en": {
+          "name": "Alfajores",
+          "info": "Alfajores are traditional sweets, mainly of Spanish and Latin American origin, made from two or more layers of dough joined by a filling — usually dulce de leche — and often coated in coconut.",
+          "ingredients": [
+            {
+              "name": "Cornstarch",
+              "qty": 2,
+              "unit": "cups"
+            },
+            {
+              "name": "Flour",
+              "qty": 2,
+              "unit": "cups"
+            },
+            {
+              "name": "Baking powder",
+              "qty": 1,
+              "unit": "pinch"
+            },
+            {
+              "name": "Baking soda",
+              "qty": 1,
+              "unit": "pinch"
+            },
+            {
+              "name": "Vanilla",
+              "qty": 1,
+              "unit": "pinch"
+            },
+            {
+              "name": "Lemon zest",
+              "qty": 1,
+              "unit": "pinch"
+            },
+            {
+              "name": "Egg",
+              "qty": 1,
+              "unit": ""
+            },
+            {
+              "name": "Egg yolk",
+              "qty": 1,
+              "unit": ""
+            },
+            {
+              "name": "Shredded coconut",
+              "qty": 1,
+              "unit": "tbsp"
+            },
+            {
+              "name": "Butter",
+              "qty": 100,
+              "unit": "g"
+            },
+            {
+              "name": "Dulce de leche",
+              "qty": 200,
+              "unit": "g"
+            }
+          ],
+          "steps": [
+            "In a bowl, mix room-temperature butter with sugar, vanilla, lemon zest and the eggs.",
+            "In another bowl, mix the flour, cornstarch, baking powder and baking soda with a pinch of salt.",
+            "Sift the flour mixture over the butter mixture and combine until you get a crumbly dough.",
+            "Knead on the table and let it rest for 1 hour in the fridge.",
+            "Roll out the dough between two sheets of plastic wrap and cut out circles.",
+            "Bake at 180°C (350°F) for 12 minutes, without letting them brown.",
+            "Sandwich pairs together with dulce de leche and roll the edge in shredded coconut."
+          ]
+        },
+        "hu": {
+          "name": "Alfajores",
+          "info": "Az alfajores hagyományos, elsősorban spanyol és latin-amerikai eredetű édesség, amely két vagy több tésztalapból áll, amelyeket krém — általában dulce de leche — köt össze, és gyakran kókusszal szórják meg.",
+          "ingredients": [
+            {
+              "name": "Kukoricakeményítő",
+              "qty": 2,
+              "unit": "csésze"
+            },
+            {
+              "name": "Liszt",
+              "qty": 2,
+              "unit": "csésze"
+            },
+            {
+              "name": "Sütőpor",
+              "qty": 1,
+              "unit": "csipet"
+            },
+            {
+              "name": "Szódabikarbóna",
+              "qty": 1,
+              "unit": "csipet"
+            },
+            {
+              "name": "Vanília",
+              "qty": 1,
+              "unit": "csipet"
+            },
+            {
+              "name": "Citromhéj",
+              "qty": 1,
+              "unit": "csipet"
+            },
+            {
+              "name": "Tojás",
+              "qty": 1,
+              "unit": ""
+            },
+            {
+              "name": "Tojássárgája",
+              "qty": 1,
+              "unit": ""
+            },
+            {
+              "name": "Reszelt kókusz",
+              "qty": 1,
+              "unit": "evőkanál"
+            },
+            {
+              "name": "Vaj",
+              "qty": 100,
+              "unit": "g"
+            },
+            {
+              "name": "Dulce de leche",
+              "qty": 200,
+              "unit": "g"
+            }
+          ],
+          "steps": [
+            "Egy tálban keverjük össze a szobahőmérsékletű vajat a cukorral, a vaníliával, a citromhéjjal és a tojásokkal.",
+            "Egy másik tálban keverjük össze a lisztet, a keményítőt, a sütőport és a szódabikarbónát egy csipet sóval.",
+            "Szitáljuk a lisztes keveréket a vajas keverékre, és keverjük össze, amíg morzsás tésztát nem kapunk.",
+            "Gyúrjuk össze az asztalon, majd pihentessük 1 órát a hűtőben.",
+            "Nyújtsuk ki a tésztát két fólia között, és szaggassunk ki köröket.",
+            "Süssük 180°C-on 12 percig, ügyelve, hogy ne barnuljanak meg.",
+            "Ragasszuk össze párban dulce de lechével, és forgassuk a szélüket reszelt kókuszba."
+          ]
+        }
+      },
+      "id": 1
+    },
+    {
+      "mealTypes": [
+        "comida",
+        "cena"
+      ],
+      "country": "Turquía",
+      "healthy": false,
+      "temp": "caliente",
+      "prepTime": 90,
+      "servings": 6,
+      "image": "",
+      "emoji": "🫓",
+      "tags": [
+        "especiado",
+        "horno",
+        "para compartir"
+      ],
+      "i18n": {
+        "es": {
+          "name": "Pide Lahmacun",
+          "info": "Es un tipo de pan plano turco, similar a una pizza, con forma de barco y cubierto con diversos ingredientes como carne picada, queso o huevos.",
+          "ingredients": [
+            {
+              "name": "Harina",
+              "qty": 500,
+              "unit": "g"
+            },
+            {
+              "name": "Sal",
+              "qty": 1,
+              "unit": "cdta"
+            },
+            {
+              "name": "Azúcar",
+              "qty": 1,
+              "unit": "cdta"
+            },
+            {
+              "name": "Levadura seca",
+              "qty": 7,
+              "unit": "g"
+            },
+            {
+              "name": "Agua tibia",
+              "qty": 300,
+              "unit": "ml"
+            },
+            {
+              "name": "Aceite de oliva",
+              "qty": 2,
+              "unit": "cda"
+            },
+            {
+              "name": "Carne de cordero picada",
+              "qty": 300,
+              "unit": "g"
+            },
+            {
+              "name": "Cebolla",
+              "qty": 1,
+              "unit": "ud"
+            },
+            {
+              "name": "Tomate",
+              "qty": 2,
+              "unit": "ud"
+            },
+            {
+              "name": "Pimiento verde",
+              "qty": 1,
+              "unit": "ud"
+            },
+            {
+              "name": "Ajo",
+              "qty": 2,
+              "unit": "dientes"
+            },
+            {
+              "name": "Pasta de tomate",
+              "qty": 1,
+              "unit": "cda"
+            },
+            {
+              "name": "Pimentón dulce",
+              "qty": 1,
+              "unit": "cdta"
+            },
+            {
+              "name": "Comino molido",
+              "qty": 0.5,
+              "unit": "cdta"
+            }
+          ],
+          "steps": [
+            "Disuelve la levadura con azúcar en agua tibia y deja reposar 10 minutos hasta que espume.",
+            "Mezcla la harina y la sal, haz un hueco y añade la levadura, el resto del agua y el aceite.",
+            "Amasa hasta obtener una masa suave y elástica; deja reposar 1 hora hasta que doble su tamaño.",
+            "Mezcla la carne con la cebolla, tomate, pimiento, ajo, pasta de tomate y especias.",
+            "Precalienta el horno al máximo. Divide la masa en bolas y extiéndelas finas en forma ovalada.",
+            "Cubre cada base con una capa fina de relleno de carne.",
+            "Hornea 8-12 minutos hasta que la masa esté crujiente y la carne bien cocida.",
+            "Sirve caliente con rodajas de limón."
+          ]
+        },
+        "en": {
+          "name": "Pide Lahmacun",
+          "info": "A Turkish flatbread, similar to a pizza, shaped like a boat and topped with ingredients such as minced meat, cheese or eggs.",
+          "ingredients": [
+            {
+              "name": "Flour",
+              "qty": 500,
+              "unit": "g"
+            },
+            {
+              "name": "Salt",
+              "qty": 1,
+              "unit": "tsp"
+            },
+            {
+              "name": "Sugar",
+              "qty": 1,
+              "unit": "tsp"
+            },
+            {
+              "name": "Dry yeast",
+              "qty": 7,
+              "unit": "g"
+            },
+            {
+              "name": "Warm water",
+              "qty": 300,
+              "unit": "ml"
+            },
+            {
+              "name": "Olive oil",
+              "qty": 2,
+              "unit": "tbsp"
+            },
+            {
+              "name": "Minced lamb",
+              "qty": 300,
+              "unit": "g"
+            },
+            {
+              "name": "Onion",
+              "qty": 1,
+              "unit": ""
+            },
+            {
+              "name": "Tomato",
+              "qty": 2,
+              "unit": ""
+            },
+            {
+              "name": "Green pepper",
+              "qty": 1,
+              "unit": ""
+            },
+            {
+              "name": "Garlic",
+              "qty": 2,
+              "unit": "cloves"
+            },
+            {
+              "name": "Tomato paste",
+              "qty": 1,
+              "unit": "tbsp"
+            },
+            {
+              "name": "Sweet paprika",
+              "qty": 1,
+              "unit": "tsp"
+            },
+            {
+              "name": "Ground cumin",
+              "qty": 0.5,
+              "unit": "tsp"
+            }
+          ],
+          "steps": [
+            "Dissolve the yeast with sugar in warm water and let it rest 10 minutes until foamy.",
+            "Mix the flour and salt, make a well and add the yeast mixture, the rest of the water and the oil.",
+            "Knead until you get a soft, elastic dough; let it rest 1 hour until it doubles in size.",
+            "Mix the meat with the onion, tomato, pepper, garlic, tomato paste and spices.",
+            "Preheat the oven to its highest setting. Divide the dough into balls and roll them out thin in an oval shape.",
+            "Cover each base with a thin layer of the meat filling.",
+            "Bake for 8–12 minutes until the dough is crisp and the meat is fully cooked.",
+            "Serve hot with lemon wedges."
+          ]
+        },
+        "hu": {
+          "name": "Pide Lahmacun",
+          "info": "Török lepénykenyér, ami a pizzához hasonlít, csónak alakú, és darált hússal, sajttal vagy tojással a tetején sütik.",
+          "ingredients": [
+            {
+              "name": "Liszt",
+              "qty": 500,
+              "unit": "g"
+            },
+            {
+              "name": "Só",
+              "qty": 1,
+              "unit": "tk"
+            },
+            {
+              "name": "Cukor",
+              "qty": 1,
+              "unit": "tk"
+            },
+            {
+              "name": "Szárított élesztő",
+              "qty": 7,
+              "unit": "g"
+            },
+            {
+              "name": "Langyos víz",
+              "qty": 300,
+              "unit": "ml"
+            },
+            {
+              "name": "Olívaolaj",
+              "qty": 2,
+              "unit": "evőkanál"
+            },
+            {
+              "name": "Darált bárányhús",
+              "qty": 300,
+              "unit": "g"
+            },
+            {
+              "name": "Hagyma",
+              "qty": 1,
+              "unit": "db"
+            },
+            {
+              "name": "Paradicsom",
+              "qty": 2,
+              "unit": "db"
+            },
+            {
+              "name": "Zöldpaprika",
+              "qty": 1,
+              "unit": "db"
+            },
+            {
+              "name": "Fokhagyma",
+              "qty": 2,
+              "unit": "gerezd"
+            },
+            {
+              "name": "Paradicsompüré",
+              "qty": 1,
+              "unit": "evőkanál"
+            },
+            {
+              "name": "Édes pirospaprika",
+              "qty": 1,
+              "unit": "tk"
+            },
+            {
+              "name": "Őrölt kömény",
+              "qty": 0.5,
+              "unit": "tk"
+            }
+          ],
+          "steps": [
+            "Oldjuk fel az élesztőt cukorral langyos vízben, és hagyjuk 10 percig pihenni, amíg habzani nem kezd.",
+            "Keverjük össze a lisztet a sóval, csináljunk egy mélyedést, és adjuk hozzá az élesztős keveréket, a maradék vizet és az olajat.",
+            "Gyúrjuk simára, rugalmasra; hagyjuk 1 órát kelni, amíg megduplázódik a mérete.",
+            "Keverjük össze a húst a hagymával, paradicsommal, paprikával, fokhagymával, paradicsompürével és a fűszerekkel.",
+            "Melegítsük elő a sütőt a legmagasabb fokozatra. Osszuk gombócokra a tésztát, és nyújtsuk ki vékonyra, ovális formára.",
+            "Kenjünk vékony réteg húsos tölteléket minden alapra.",
+            "Süssük 8–12 percig, amíg a tészta ropogós és a hús átsül.",
+            "Melegen tálaljuk citromkarikákkal."
+          ]
+        }
+      },
+      "id": 2
+    },
+    {
+      "mealTypes": [
+        "comida",
+        "cena"
+      ],
+      "country": "Argentina",
+      "healthy": false,
+      "temp": "caliente",
+      "prepTime": 60,
+      "servings": 14,
+      "image": "",
+      "emoji": "🥟",
+      "tags": [
+        "horno",
+        "fiesta",
+        "para compartir"
+      ],
+      "i18n": {
+        "es": {
+          "name": "Empanadas caseras",
+          "info": "La empanada es una fina masa de pan, masa quebrada u hojaldre rellena con una preparación salada o dulce y cocida al horno o frita. Plato tradicional de la mayoría de las cocinas latinoamericanas.",
+          "ingredients": [
+            {
+              "name": "Harina de trigo",
+              "qty": 500,
+              "unit": "g"
+            },
+            {
+              "name": "Sal",
+              "qty": 1,
+              "unit": "cdta"
+            },
+            {
+              "name": "Manteca derretida",
+              "qty": 100,
+              "unit": "g"
+            },
+            {
+              "name": "Agua tibia",
+              "qty": 200,
+              "unit": "ml"
+            },
+            {
+              "name": "Vinagre o jugo de limón",
+              "qty": 1,
+              "unit": "cdta"
+            },
+            {
+              "name": "Carne picada",
+              "qty": 400,
+              "unit": "g"
+            },
+            {
+              "name": "Cebolla",
+              "qty": 2,
+              "unit": "ud"
+            },
+            {
+              "name": "Huevo duro",
+              "qty": 2,
+              "unit": "ud"
+            },
+            {
+              "name": "Aceituna verde",
+              "qty": 12,
+              "unit": "ud"
+            },
+            {
+              "name": "Pimentón dulce",
+              "qty": 1,
+              "unit": "cdta"
+            },
+            {
+              "name": "Comino",
+              "qty": 0.5,
+              "unit": "cdta"
+            }
+          ],
+          "steps": [
+            "Mezcla la harina con la sal, la manteca derretida, el agua y el vinagre hasta formar una masa lisa.",
+            "Deja reposar la masa 30 minutos tapada.",
+            "Rehoga la cebolla, añade la carne picada y las especias, cocina hasta dorar.",
+            "Deja enfriar el relleno y añade el huevo duro picado y las aceitunas.",
+            "Estira la masa y corta discos; rellena y cierra en repulgue.",
+            "Hornea a 200°C 20-25 minutos o fríe hasta dorar."
+          ]
+        },
+        "en": {
+          "name": "Homemade empanadas",
+          "info": "An empanada is a thin pastry — shortcrust or puff dough — filled with a savoury or sweet preparation and baked or fried. A traditional dish across most Latin American cuisines.",
+          "ingredients": [
+            {
+              "name": "Wheat flour",
+              "qty": 500,
+              "unit": "g"
+            },
+            {
+              "name": "Salt",
+              "qty": 1,
+              "unit": "tsp"
+            },
+            {
+              "name": "Melted lard",
+              "qty": 100,
+              "unit": "g"
+            },
+            {
+              "name": "Warm water",
+              "qty": 200,
+              "unit": "ml"
+            },
+            {
+              "name": "Vinegar or lemon juice",
+              "qty": 1,
+              "unit": "tsp"
+            },
+            {
+              "name": "Minced meat",
+              "qty": 400,
+              "unit": "g"
+            },
+            {
+              "name": "Onion",
+              "qty": 2,
+              "unit": ""
+            },
+            {
+              "name": "Hard-boiled egg",
+              "qty": 2,
+              "unit": ""
+            },
+            {
+              "name": "Green olives",
+              "qty": 12,
+              "unit": ""
+            },
+            {
+              "name": "Sweet paprika",
+              "qty": 1,
+              "unit": "tsp"
+            },
+            {
+              "name": "Cumin",
+              "qty": 0.5,
+              "unit": "tsp"
+            }
+          ],
+          "steps": [
+            "Mix the flour with the salt, melted lard, water and vinegar until you get a smooth dough.",
+            "Let the dough rest for 30 minutes, covered.",
+            "Sauté the onion, add the minced meat and spices, and cook until browned.",
+            "Let the filling cool and add the chopped hard-boiled egg and the olives.",
+            "Roll out the dough and cut discs; fill and seal with a braided edge.",
+            "Bake at 200°C (400°F) for 20–25 minutes, or fry until golden."
+          ]
+        },
+        "hu": {
+          "name": "Házi empanada",
+          "info": "Az empanada vékony tészta — omlós vagy leveles —, amelyet sós vagy édes töltelékkel töltenek meg, majd sütőben vagy olajban sütnek. Hagyományos étel a legtöbb latin-amerikai konyhában.",
+          "ingredients": [
+            {
+              "name": "Búzaliszt",
+              "qty": 500,
+              "unit": "g"
+            },
+            {
+              "name": "Só",
+              "qty": 1,
+              "unit": "tk"
+            },
+            {
+              "name": "Olvasztott zsír",
+              "qty": 100,
+              "unit": "g"
+            },
+            {
+              "name": "Langyos víz",
+              "qty": 200,
+              "unit": "ml"
+            },
+            {
+              "name": "Ecet vagy citromlé",
+              "qty": 1,
+              "unit": "tk"
+            },
+            {
+              "name": "Darált hús",
+              "qty": 400,
+              "unit": "g"
+            },
+            {
+              "name": "Hagyma",
+              "qty": 2,
+              "unit": "db"
+            },
+            {
+              "name": "Kemény tojás",
+              "qty": 2,
+              "unit": "db"
+            },
+            {
+              "name": "Zöld olívabogyó",
+              "qty": 12,
+              "unit": "db"
+            },
+            {
+              "name": "Édes pirospaprika",
+              "qty": 1,
+              "unit": "tk"
+            },
+            {
+              "name": "Kömény",
+              "qty": 0.5,
+              "unit": "tk"
+            }
+          ],
+          "steps": [
+            "Keverjük össze a lisztet a sóval, az olvasztott zsírral, a vízzel és az ecettel, amíg sima tésztát nem kapunk.",
+            "Hagyjuk pihenni a tésztát 30 percig, letakarva.",
+            "Pirítsuk meg a hagymát, adjuk hozzá a darált húst és a fűszereket, és süssük, amíg megpirul.",
+            "Hagyjuk kihűlni a tölteléket, majd adjuk hozzá az apróra vágott tojást és az olívabogyót.",
+            "Nyújtsuk ki a tésztát, vágjunk ki korongokat, töltsük meg és zárjuk le fonott szegéllyel.",
+            "Süssük 200°C-on 20–25 percig, vagy süssük ki olajban aranybarnára."
+          ]
+        }
+      },
+      "id": 3
+    }
+  ],
+  "mealImages": {},
+  "nextId": 4,
+  "updatedAt": "2026-08-26T19:57:11.766Z"
+}
