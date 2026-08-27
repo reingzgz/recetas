@@ -776,9 +776,108 @@
         "domingo feliz"
       ],
       "id": 5
+    },
+    {
+      "mealTypes": [
+        "comida",
+        "cena"
+      ],
+      "country": "España",
+      "temp": "caliente",
+      "prepTime": 25,
+      "servings": 3,
+      "healthy": false,
+      "image": "",
+      "emoji": "🍽️",
+      "i18n": {
+        "es": {
+          "name": "Garbanzos cremosos con pollo y bacon crujiente",
+          "info": "Un plato delicioso y sencillo que combina la textura suave y cremosa de los garbanzos cocidos en una salsa de nata, queso parmesano y caldo con el toque crujiente e intenso del bacon dorado y los trozos jugosos de pollo. Ideal para el día a día.",
+          "ingredients": [
+            {
+              "name": "Garbanzos cocidos ",
+              "qty": 500,
+              "unit": "g"
+            },
+            {
+              "name": "Contra muslos de pollo ",
+              "qty": 200,
+              "unit": "g"
+            },
+            {
+              "name": "Bacon (Panceta)",
+              "qty": 100,
+              "unit": "g"
+            },
+            {
+              "name": "Nata para cocinar ",
+              "qty": 200,
+              "unit": "ml"
+            },
+            {
+              "name": "Caldo de pollo ",
+              "qty": 150,
+              "unit": "ml"
+            },
+            {
+              "name": "Queso parmesano rallado ",
+              "qty": 50,
+              "unit": "g"
+            },
+            {
+              "name": "Cebolla",
+              "qty": 1,
+              "unit": "unidad"
+            },
+            {
+              "name": "Diente de ajo ",
+              "qty": 1,
+              "unit": "unidad"
+            },
+            {
+              "name": "Aceite de oliva ",
+              "qty": 2,
+              "unit": "cucharadas al gusto"
+            },
+            {
+              "name": "Sal y pimienta ",
+              "qty": "",
+              "unit": "al gusto"
+            }
+          ],
+          "steps": [
+            "Cocinar el bacon: En una sartén, cocinamos las tiras de bacon hasta que queden bien crujientes. Retiramos, troceamos y reservamos.",
+            "Sofreír la verdura: En la misma sartén (aprovechando la grasita del bacon), picamos la cebolla y la sofreímos con un poco de sal y pimienta hasta que esté dorada.",
+            "Añadir el ajo: Agregamos el diente de ajo rallado y lo doramos durante un minuto con cuidado de que no se queme.",
+            "Cocinar el pollo: Añadimos los trozos de contramuslos de pollo salpimentados y cocinamos hasta que queden bien sellados y dorados.",
+            "Incorporar las legumbres: Añadimos los garbanzos cocidos y la mayor parte del bacon crujiente (reservando un poco para decorar al final), y rehogamos todo junto un par de minutos.",
+            "Hacer la salsa: Vertemos la nata para cocinar, el caldo de pollo y el queso parmesano rallado. Removemos bien y dejamos cocinar a fuego medio-bajo hasta que la salsa reduzca y espese a nuestro gusto.",
+            "Servir: Servimos en un plato hondo o cuenco, decoramos por encima con el bacon crujiente reservado y ¡listo para disfrutar!"
+          ]
+        },
+        "en": {
+          "name": "",
+          "info": "",
+          "ingredients": [],
+          "steps": []
+        },
+        "hu": {
+          "name": "",
+          "info": "",
+          "ingredients": [],
+          "steps": []
+        }
+      },
+      "tags": [
+        "Saborosa",
+        "Rápida",
+        "Reconfortante"
+      ],
+      "id": 6,
+      "_scale": 3
     }
   ],
   "mealImages": {},
-  "nextId": 6,
-  "updatedAt": "2026-08-27T12:15:57.119Z"
+  "nextId": 7,
+  "updatedAt": "2026-08-27T12:31:41.577Z"
 }
