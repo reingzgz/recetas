@@ -229,7 +229,7 @@
         }
       },
       "id": 1,
-      "_scale": 14
+      "_scale": 12
     },
     {
       "mealTypes": [
@@ -776,9 +776,44 @@
         "domingo felices"
       ],
       "id": 5
+    },
+    {
+      "mealTypes": [
+        "desayuno"
+      ],
+      "country": "",
+      "temp": "",
+      "prepTime": null,
+      "servings": 4,
+      "healthy": false,
+      "image": "",
+      "emoji": "🍽️",
+      "i18n": {
+        "es": {
+          "name": "Habababababa",
+          "info": "",
+          "ingredients": [],
+          "steps": []
+        },
+        "en": {
+          "name": "",
+          "info": "",
+          "ingredients": [],
+          "steps": []
+        },
+        "hu": {
+          "name": "",
+          "info": "",
+          "ingredients": [],
+          "steps": []
+        }
+      },
+      "tags": [],
+      "id": 6,
+      "_scale": 4
     }
   ],
   "mealImages": {},
-  "nextId": 6,
-  "updatedAt": "2026-08-27T07:13:58.078Z"
+  "nextId": 7,
+  "updatedAt": "2026-08-27T07:14:25.019Z"
 }
