@@ -875,9 +875,87 @@
       ],
       "id": 6,
       "_scale": 3
+    },
+    {
+      "mealTypes": [
+        "comida",
+        "cena"
+      ],
+      "country": "España",
+      "temp": "",
+      "prepTime": 30,
+      "servings": 4,
+      "healthy": false,
+      "image": "",
+      "emoji": "🍽️",
+      "i18n": {
+        "es": {
+          "name": "Salsa de tomate intensa",
+          "info": "El chocolate se usó en salsas saladas mucho antes que en postres. Los aztecas mezclaban cacao con tomate y chiles en salsas espesas, precursoras del mole, y según la tradición uno de los primeros lugares de Europa donde se preparó chocolate fue el Monasterio de Piedra, en Aragón.",
+          "ingredients": [
+            {
+              "name": "Cebolla",
+              "qty": 1,
+              "unit": "Ud"
+            },
+            {
+              "name": "Pimiento rojo y verde",
+              "qty": 1,
+              "unit": "Ud"
+            },
+            {
+              "name": "Aceite ",
+              "qty": 100,
+              "unit": "ml"
+            },
+            {
+              "name": "Chocolate 80%",
+              "qty": 1,
+              "unit": "Onza"
+            },
+            {
+              "name": "Tomate natural triturado",
+              "qty": 500,
+              "unit": "ml"
+            },
+            {
+              "name": "Chorizo",
+              "qty": 1,
+              "unit": "Trozo"
+            },
+            {
+              "name": "Especias",
+              "qty": 1,
+              "unit": "Pizca de cada"
+            }
+          ],
+          "steps": [
+            "Freír la verdura y el chorizo a fuego fuerte ",
+            "Añadir el tomate ",
+            "Bajar el fuego y tapar durante 20 mins "
+          ]
+        },
+        "en": {
+          "name": "",
+          "info": "",
+          "ingredients": [],
+          "steps": []
+        },
+        "hu": {
+          "name": "",
+          "info": "",
+          "ingredients": [],
+          "steps": []
+        }
+      },
+      "tags": [
+        "Salsa"
+      ],
+      "id": 7,
+      "_scale": 4
     }
   ],
   "mealImages": {},
-  "nextId": 7,
-  "updatedAt": "2026-08-27T12:33:41.897Z"
+  "nextId": 8,
+  "updatedAt": "2026-09-16T18:36:50.709Z"
 }
