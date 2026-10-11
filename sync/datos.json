@@ -951,11 +951,81 @@
       "tags": [
         "Salsa"
       ],
-      "id": 7,
+      "id": 7
+    },
+    {
+      "mealTypes": [
+        "comida",
+        "cena"
+      ],
+      "country": "España",
+      "temp": "caliente",
+      "prepTime": 25,
+      "servings": 4,
+      "healthy": true,
+      "image": "",
+      "emoji": "🍽️",
+      "i18n": {
+        "es": {
+          "name": "Borrajas con patatas",
+          "info": "Una teoría dice que \"borraja\" viene del latín borra, que significa pelo áspero o lana basta, porque toda la planta está cubierta de vellosidades que pinchan un poco al tocarla. Otra la relaciona con el árabe abu araq, \"padre del sudor\", porque se usaba para hacer sudar en caso de fiebre.",
+          "ingredients": [
+            {
+              "name": "Borrajas ",
+              "qty": 1,
+              "unit": "Bote"
+            },
+            {
+              "name": "Patatas",
+              "qty": 4,
+              "unit": ""
+            },
+            {
+              "name": "Ajo",
+              "qty": 1,
+              "unit": "Diente"
+            },
+            {
+              "name": "Panceta",
+              "qty": 100,
+              "unit": "Gramos "
+            },
+            {
+              "name": "Pimentón de la vera",
+              "qty": 1,
+              "unit": "Cucharada"
+            }
+          ],
+          "steps": [
+            "Lavar las borrajas",
+            "Pelar y cortar las patatas en cubos",
+            "Añadir a olla con agua hirviendo y hervir durante 25 mins",
+            "Freír pan cena y ajo y añadir al final pimenton",
+            "Colar las borrajas y patatas",
+            "Mezclar todo"
+          ]
+        },
+        "en": {
+          "name": "",
+          "info": "",
+          "ingredients": [],
+          "steps": []
+        },
+        "hu": {
+          "name": "",
+          "info": "",
+          "ingredients": [],
+          "steps": []
+        }
+      },
+      "tags": [
+        "Tradicion"
+      ],
+      "id": 8,
       "_scale": 4
     }
   ],
   "mealImages": {},
-  "nextId": 8,
-  "updatedAt": "2026-09-16T18:36:50.709Z"
+  "nextId": 9,
+  "updatedAt": "2026-10-11T14:45:15.329Z"
 }
