@@ -1021,11 +1021,82 @@
       "tags": [
         "Tradicion"
       ],
-      "id": 8,
+      "id": 8
+    },
+    {
+      "mealTypes": [
+        "comida",
+        "cena"
+      ],
+      "country": "",
+      "temp": "caliente",
+      "prepTime": 30,
+      "servings": 4,
+      "healthy": false,
+      "image": "",
+      "emoji": "🍽️",
+      "i18n": {
+        "es": {
+          "name": "Ñoquis con setas",
+          "info": "",
+          "ingredients": [
+            {
+              "name": "Pechuga de pollo",
+              "qty": 800,
+              "unit": "Gr"
+            },
+            {
+              "name": "Setas",
+              "qty": 400,
+              "unit": "Gr"
+            },
+            {
+              "name": "Nata",
+              "qty": 200,
+              "unit": "Ml"
+            },
+            {
+              "name": "Cebolla",
+              "qty": 1,
+              "unit": "Ud"
+            },
+            {
+              "name": "Queso",
+              "qty": 100,
+              "unit": "Gr"
+            },
+            {
+              "name": "Ñoquis",
+              "qty": 500,
+              "unit": "Gr"
+            }
+          ],
+          "steps": [
+            "Freír el pollo a fuego fuerte y retirar",
+            "En la misma sartén freír la cebolla y los champiñones ",
+            "Mezclar el pollo cortado con los champiñones y la nata",
+            "Añadir los ñoquis ya cocidos y queso"
+          ]
+        },
+        "en": {
+          "name": "",
+          "info": "",
+          "ingredients": [],
+          "steps": []
+        },
+        "hu": {
+          "name": "",
+          "info": "",
+          "ingredients": [],
+          "steps": []
+        }
+      },
+      "tags": [],
+      "id": 9,
       "_scale": 4
     }
   ],
   "mealImages": {},
-  "nextId": 9,
-  "updatedAt": "2026-10-11T14:45:15.329Z"
+  "nextId": 10,
+  "updatedAt": "2026-11-19T18:27:24.134Z"
 }
